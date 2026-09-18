@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<title>RPM Exhaust Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="app-header">
+    <h1>RPM EXHAUST <span class="accent">SIMULATOR</span></h1>
+    <div class="header-line"></div>
+  </header>
+
+  <div class="status-banner" id="statusBanner" role="status"></div>
+
+  <main class="layout">
+
+    <section class="camera-section">
+      <div class="camera-frame" id="cameraFrame">
+        <video id="video" playsinline autoplay muted></video>
+        <canvas id="canvas"></canvas>
+        <div class="camera-placeholder" id="cameraPlaceholder">
+          <button class="btn btn-primary" id="startCameraBtn">Start Camera</button>
+          <p class="hint">Point the rear camera at the RPM gauge</p>
+        </div>
+      </div>
+
+      <div class="rpm-display">
+        <div class="rpm-label">ENGINE SPEED</div>
+        <div class="rpm-row">
+          <span class="rpm-value" id="rpmValue">&mdash;</span>
+          <span class="rpm-unit">RPM</span>
+        </div>
+        <div class="rpm-bar"><div class="rpm-bar-fill" id="rpmBarFill"></div></div>
+      </div>
+    </section>
+
+    <section class="controls">
+
+      <div class="panel">
+        <h2>Calibration</h2>
+
+        <div class="calib-step">
+          <button class="btn step-btn" id="setPivotBtn" disabled>1 &middot; Set Pivot Point</button>
+          <span class="step-status" id="pivotStatus">Not set</span>
+        </div>
+        <div class="calib-step">
+          <button class="btn step-btn" id="setIdleBtn" disabled>2 &middot; Set Idle Needle Position</button>
+          <span class="step-status" id="idleStatus">Not set</span>
+        </div>
+        <div class="calib-step">
+          <button class="btn step-btn" id="setMaxBtn" disabled>3 &middot; Set Max Needle Position</button>
+          <span class="step-status" id="maxStatus">Not set</span>
+        </div>
+        <div class="calib-step">
+          <button class="btn step-btn" id="pickColorBtn" disabled>4 &middot; Pick Needle Color</button>
+          <span class="step-status" id="colorStatus">Not set</span>
+          <span class="color-swatch" id="colorSwatch"></span>
+        </div>
+
+        <div class="field-row two-col">
+          <label>Min RPM
+            <input type="number" id="minRpmInput" value="0" inputmode="numeric">
+          </label>
+          <label>Max RPM
+            <input type="number" id="maxRpmInput" value="7000" inputmode="numeric">
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label>Scan Radius <span class="value-tag" id="radiusValue">80</span>px
+            <input type="range" id="radiusSlider" min="10" max="400" value="80">
+          </label>
+        </div>
+        <div class="field-row">
+          <label>Color Match Threshold <span class="value-tag" id="thresholdValue">35</span>%
+            <input type="range" id="thresholdSlider" min="1" max="100" value="35">
+          </label>
+        </div>
+        <div class="field-row">
+          <label>Smoothing <span class="value-tag" id="smoothingValue">25</span>%
+            <input type="range" id="smoothingSlider" min="1" max="100" value="25">
+          </label>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="saveCalibrationBtn" disabled>Save Calibration</button>
+          <button class="btn btn-outline" id="resetCalibrationBtn">Reset Calibration</button>
+        </div>
+        <p class="calib-note" id="calibNote"></p>
+      </div>
+
+      <div class="panel">
+        <h2>Exhaust Sound</h2>
+
+        <div class="field-row">
+          <label class="file-label btn btn-outline">
+            Load Audio Loop
+            <input type="file" id="audioFileInput" accept="audio/*" hidden>
+          </label>
+          <span class="step-status" id="audioFileStatus">Using synthesized engine sound</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="startSoundBtn">Start Engine Sound</button>
+          <button class="btn btn-outline" id="stopSoundBtn" disabled>Stop</button>
+        </div>
+
+        <div class="field-row">
+          <label>Volume <span class="value-tag" id="volumeValue">70</span>%
+            <input type="range" id="volumeSlider" min="0" max="100" value="70">
+          </label>
+        </div>
+
+        <div class="field-row two-col" id="fileModeControls" hidden>
+          <label>Min Playback Rate <span class="value-tag" id="pitchMinValue">0.50</span>x
+            <input type="range" id="pitchMinSlider" min="10" max="150" value="50">
+          </label>
+          <label>Max Playback Rate <span class="value-tag" id="pitchMaxValue">2.00</span>x
+            <input type="range" id="pitchMaxSlider" min="50" max="400" value="200">
+          </label>
+        </div>
+
+        <div class="field-row" id="synthModeControls">
+          <label>Cylinders (synth) <span class="value-tag" id="cylindersValue">4</span>
+            <input type="range" id="cylindersSlider" min="1" max="12" value="4">
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Debug</h2>
+        <label class="toggle-row">
+          <span class="toggle-text">Debug Overlay</span>
+          <span class="toggle">
+            <input type="checkbox" id="debugToggle">
+            <span class="toggle-slider"></span>
+          </span>
+        </label>
+        <p class="hint">Shows the pivot point, scan circle and detected needle angle on the camera feed.</p>
+      </div>
+
+    </section>
+  </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
