@@ -376,13 +376,21 @@
     }
   }
 
-  video.addEventListener('loadedmetadata', () => {
+  let cameraStarted = false;
+  function onVideoReady() {
+    if (cameraStarted) return;
+    if (!video.videoWidth || !video.videoHeight) return;
+    cameraStarted = true;
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     cameraPlaceholder.hidden = true;
     [setPivotBtn, setIdleBtn, setMaxBtn, pickColorBtn].forEach((b) => (b.disabled = false));
     requestAnimationFrame(tick);
-  });
+  }
+  // different mobile browsers fire these at different points; listen to all and guard with cameraStarted
+  video.addEventListener('loadedmetadata', onVideoReady);
+  video.addEventListener('loadeddata', onVideoReady);
+  video.addEventListener('canplay', onVideoReady);
 
   startCameraBtn.addEventListener('click', startCamera);
 

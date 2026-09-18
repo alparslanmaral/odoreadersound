@@ -104,8 +104,9 @@ body {
 
 .camera-frame video {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   opacity: 0;
   pointer-events: none;
 }
@@ -126,6 +127,10 @@ body {
   justify-content: center;
   gap: 12px;
   background: radial-gradient(circle at 50% 40%, var(--bg-alt), #000);
+}
+
+.camera-placeholder[hidden] {
+  display: none;
 }
 
 .camera-placeholder .hint {
